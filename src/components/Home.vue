@@ -2,7 +2,7 @@
   <div id="TextBox">
     <textarea v-model="input_text" placeholder="$E=mc^2$"
       rows="10" cols="50"></textarea><br>
-    <vue-mathjax v-bind:formula="input_text"></vue-mathjax>
+    <vue-mathjax v-bind:formula="input_text" v-bind:options="options"></vue-mathjax>
   </div>
 </template>
 
@@ -16,7 +16,36 @@ export default {
   },
   data: function () {
     return {
-      input_text: ''
+      input_text: '',
+      options: {
+        /*
+        extensions: ['tex2jax.js', 'TeX/AMSmath.js'],
+        config: ['TeX-AMS-MML_SVG.js'],
+        loader: { load: ['output/svg'] },
+        jax: ['input/TeX', 'output/SVG'],
+        tex2jax: {
+          inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+          displayMath: [ ['$$', '$$'], ['\\[', '\\]'] ],
+          processEscapes: true
+        },
+        'HTML-CSS': {},
+        svg: {
+          scale: 1,
+          minScale: 0.5,
+          mtextInheritFont: false,
+          merrorInheritFont: true,
+          mathmlSpacing: false,
+          skipAttributes: {},
+          exFactor: 0.5,
+          displayAlign: 'center',
+          displayIndent: '0',
+          fontCache: 'local',
+          localID: null,
+          internalSpeechTitles: true,
+          titleID: 0
+        }
+      */
+      }
     }
   },
   computed: {
