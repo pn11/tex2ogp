@@ -1,4 +1,4 @@
-# ogp-tex
+# TeX2OGP
 
 > A Vue.js project
 
