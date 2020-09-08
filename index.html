@@ -7,7 +7,30 @@
   </head>
   <body>
     <div id="app"></div>
-    <!-- built files will be auto injected -->
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_SVG"></script>
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+         https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-analytics.js"></script>
+    <script>
+      // Your web app's Firebase configuration
+      var firebaseConfig = {
+          apiKey: "AIzaSyBrf8WDz4-4SGaKO6vhDDTc9yGXjUTR360",
+          authDomain: "tex2ogp.firebaseapp.com",
+          databaseURL: "https://tex2ogp.firebaseio.com",
+          projectId: "tex2ogp",
+          storageBucket: "tex2ogp.appspot.com",
+          messagingSenderId: "919469548437",
+          appId: "1:919469548437:web:59e5bb607e590176da8c9c",
+          measurementId: "G-6C01613YKQ"
+      }
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig)
+      firebase.analytics()
+    </script>
   </body>
 </html>
