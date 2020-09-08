@@ -1,5 +1,5 @@
 <template>
-  <div id="TextBox">
+  <div id="Compose">
     <vue-mathjax v-bind:formula="input_eq" v-bind:options="options"></vue-mathjax><br>
     <textarea v-model="input_text" placeholder="E=mc^2"
 rows="10" cols="50"></textarea><br>
@@ -49,7 +49,7 @@ const svg2png = (svgElement, successCallback, errorCallback) => {
 }
 
 export default {
-  name: 'TextBox',
+  name: 'Compose',
   components: {
     'vue-mathjax': VueMathjax
   },
@@ -106,7 +106,7 @@ export default {
       })
     },
     async create () {
-      svg2png(document.querySelector('#TextBox > span > div > span > svg'), async (data) => {
+      svg2png(document.querySelector('#Compose > span > div > span > svg'), async (data) => {
         const uuid = this.uuidv4()
         const sRef = firebase.storage().ref()
         const fileRef = sRef.child(`${uuid}.png`)
@@ -129,7 +129,7 @@ export default {
 </script>
 
 <style>
-#TextBox {
+#Compose {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -137,7 +137,7 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
-#TextBox textarea {
+#Compose textarea {
   padding: 10px 10px;
   margin: 20px 20px;
 }

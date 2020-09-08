@@ -1,15 +1,21 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import TextBox from '@/components/Home'
+import Compose from '@/components/Compose'
+import Share from '@/components/Share'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
-      path: '/',
-      name: 'TextBox',
-      component: TextBox
+      path: '/c/',
+      name: 'Compose',
+      component: Compose
+    },
+    {
+      path: '/s/:id',
+      name: 'Share',
+      component: Share
     }
   ]
 })
