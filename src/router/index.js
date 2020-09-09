@@ -1,11 +1,12 @@
 import Vue from 'vue'
-import Router from 'vue-router'
+import VueRouter from 'vue-router'
+
 import Compose from '@/components/Compose'
 import Share from '@/components/Share'
 
-Vue.use(Router)
+Vue.use(VueRouter)
 
-export default new Router({
+export default new VueRouter({
   routes: [
     {
       path: '/c/',
@@ -16,6 +17,11 @@ export default new Router({
       path: '/s/:id',
       name: 'Share',
       component: Share
+    },
+    {
+      path: '*',
+      name: 'Not Found',
+      component: Compose
     }
   ]
 })
