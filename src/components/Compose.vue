@@ -1,12 +1,9 @@
 <template>
   <div id="Compose">
-    <vue-mathjax v-bind:formula="input_eq" v-bind:options="options"></vue-mathjax><br>
+    <vue-mathjax v-bind:formula="input_syntax" v-bind:options="options"></vue-mathjax><br>
     <textarea v-model="input_text" placeholder="E=mc^2"
 rows="10" cols="50"></textarea><br>
-    <input type="button" value="Share" @click="create">
-    <svg ref="svgCard" width="860px" height="200px" viewBox="0 0  860 520" preserveAspectRatio="xMidYMid meet" >
-      <rect id="svgEditorBackground" x="0" y="0" width="860" height="200" style="fill: none; stroke: none;"/>
-    </svg>
+    <input type="button" value="Share" @click="upload2firebase">
   </div>
 </template>
 
@@ -32,19 +29,37 @@ firebase.analytics()
 // svgをpngに変換
 const svg2png = (svgElement, successCallback, errorCallback) => {
   const canvas = document.createElement('canvas')
-  canvas.width = 1200
-  canvas.height = 630
+  // for debug
+  // document.body.insertBefore(canvas, document.getElementById('app'))
+  // const {width, height} = svgElement.getBBox()
+  // https://stackoverflow.com/a/9850384
+  var rect = svgElement.getBoundingClientRect()
+  const width = rect.width
+  const height = rect.height
+  const ratio = height / width
+  canvas.height = height
+  canvas.width = width
+  // 縦と横の大きい方を1200に設定
+  if (ratio > 1) {
+    canvas.height = 1200
+    canvas.width = canvas.height / ratio
+  } else {
+    canvas.width = 1200
+    canvas.height = canvas.width * ratio
+  }
+
+  // console.log(`${width} x ${height} -> ${canvas.width} x ${canvas.height}`)
   const ctx = canvas.getContext('2d')
   const image = new Image()
   image.onload = () => {
-    ctx.drawImage(image, 0, 0, 1200, 630)
+    ctx.drawImage(image, 0, 0, canvas.width, canvas.height)
     successCallback(canvas.toDataURL())
+    // successCallback(canvas.toDataURL('image/jpg'))
   }
   image.onerror = (e) => {
     errorCallback(e)
   }
-  let clonedSvgElement = svgElement.cloneNode(true)
-  const svgData = new XMLSerializer().serializeToString(clonedSvgElement)
+  const svgData = new XMLSerializer().serializeToString(svgElement)
   image.src = 'data:image/svg+xml;charset=utf-8;base64,' + btoa(unescape(encodeURIComponent(svgData)))
 }
 
@@ -85,6 +100,13 @@ export default {
           internalSpeechTitles: true,
           titleID: 0
           */
+          // font: 'TeX',
+          // font: 'Latin-Modern',
+          // font: 'STIX-Web',
+          font: 'Asana-Math',
+          linebreaks: {
+            width: '30em'
+          },
           useFontCache: false,
           useGlobalCache: false
         }
@@ -92,7 +114,7 @@ export default {
     }
   },
   computed: {
-    input_eq: function () {
+    input_syntax: function () {
       return '$$' + this.input_text + '$$'
     }
   },
@@ -105,11 +127,12 @@ export default {
         return v.toString(16)
       })
     },
-    async create () {
+    async upload2firebase () {
       svg2png(document.querySelector('#Compose > span > div > span > svg'), async (data) => {
         const uuid = this.uuidv4()
         const sRef = firebase.storage().ref()
         const fileRef = sRef.child(`${uuid}.png`)
+        // const fileRef = sRef.child(`${uuid}.jpg`)
 
         // Firebase Cloud Storageにアップロード
         await fileRef.putString(data, 'data_url')
@@ -119,11 +142,12 @@ export default {
         const db = firebase.firestore()
         const card = db.collection('cards').doc(uuid)
         await card.set({
-          url,
-          message: Date.now()
+          url: url,
+          time: Date.now(),
+          syntax: this.input_syntax
         })
       })
-    } // create
+    } // upload2firebase
   } // methods
 } // export default
 </script>

@@ -1,7 +1,9 @@
 <template>
   <div id="app">
-    <h2>$TeX$2OGP</h2>
+    <h2>TeX2OGP</h2>
     <router-view/>
+    <br>
+    <i class="fab fa-github"></i> <a href="https://github.com/pn11/tex2ogp">Source code</a>
   </div>
 </template>
 
