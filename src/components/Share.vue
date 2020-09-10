@@ -24,7 +24,7 @@ export default {
       fb_appid: '',
       tw_description: 'TeX2OGP',
       tw_site: '',
-      tw_creator: '',
+      tw_creator: '@nowohyeah',
       db_record: ''
     }
   }, // data
@@ -88,12 +88,12 @@ export default {
         {property: 'og:image', content: this.image_url},
         {property: 'og:image:width', content: this.og_image_width},
         {property: 'og:image:height', content: this.og_image_height},
-        {property: 'fb:app_id', content: this.fb_appid},
+        // {property: 'fb:app_id', content: this.fb_appid},
         {name: 'twitter:card', content: 'summary_large_image'},
-        {name: 'twitter:title', content: this.title},
+        // {name: 'twitter:title', content: this.title},
         {name: 'twitter:description', content: this.tw_description},
         {name: 'twitter:image', content: this.image_url},
-        {name: 'twitter:site', content: this.tw_site},
+        // {name: 'twitter:site', content: this.tw_site},
         {name: 'twitter:creator', content: this.tw_creator}
       ]
     }
