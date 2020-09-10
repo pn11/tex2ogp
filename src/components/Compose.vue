@@ -148,7 +148,11 @@ export default {
         })
       })
     } // upload2firebase
-  } // methods
+  }, // methods
+  metaInfo: {
+    title: 'vue-meta works!',
+    meta: [ {name: 'twitter:card', content: 'summary_large_image'} ]
+  } // metaInfo
 } // export default
 </script>
 

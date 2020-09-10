@@ -16,10 +16,10 @@ export default {
   },
   data: function () {
     return {
-      title: 'teste',
+      title: 'TeX2OGP',
       site_name: 'TeX2OGP',
       og_description: 'TeX2OGP',
-      og_image_width: 'aa',
+      og_image_width: '',
       og_image_height: '',
       fb_appid: '',
       tw_description: 'TeX2OGP',
@@ -73,7 +73,31 @@ export default {
     image_url: function () { return this.db_record.url },
     image_date: function () { return this.db_record.date },
     image_syntax: function () { return this.db_record.syntax }
-  }
+  },
+  metaInfo () {
+    return {
+      title: 'TeX2OGP',
+      meta: [
+        {name: 'description', content: 'TeX2OGP'},
+        {property: 'og:locale', content: 'ja_JP'},
+        {property: 'og:type', content: 'website'},
+        {property: 'og:url', content: this.url},
+        {property: 'og:title', content: this.title},
+        {property: 'og:site_name', content: this.site_name},
+        {property: 'og:description', content: this.og_description},
+        {property: 'og:image', content: this.image_url},
+        {property: 'og:image:width', content: this.og_image_width},
+        {property: 'og:image:height', content: this.og_image_height},
+        {property: 'fb:app_id', content: this.fb_appid},
+        {name: 'twitter:card', content: 'summary_large_image'},
+        {name: 'twitter:title', content: this.title},
+        {name: 'twitter:description', content: this.tw_description},
+        {name: 'twitter:image', content: this.image_url},
+        {name: 'twitter:site', content: this.tw_site},
+        {name: 'twitter:creator', content: this.tw_creator}
+      ]
+    }
+  } // metaInfo
 } // export default
 </script>
 
