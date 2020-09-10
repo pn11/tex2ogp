@@ -7,11 +7,15 @@ on:
 jobs:
   build:
     name: Build
-    runs-on: node
+    runs-on: ubuntu-lates
 
     steps:
       - name: Checkout Repo
         uses: actions/checkout@master
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
       - name: Install Dependencies
         run: npm install
       - name: Build
