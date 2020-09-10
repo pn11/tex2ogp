@@ -92,7 +92,8 @@ export default {
         {name: 'twitter:card', content: 'summary_large_image'},
         // {name: 'twitter:title', content: this.title},
         {name: 'twitter:description', content: this.tw_description},
-        {name: 'twitter:image', content: this.image_url},
+        // {name: 'twitter:image', content: this.image_url},
+        {name: 'twitter:image', content: 'https://firebasestorage.googleapis.com/v0/b/tex2ogp.appspot.com/o/01efb740-575c-461e-a53d-510dddac5afe.jpg?alt=media&token=5d37a72e-b325-4742-bec4-7281b22dc256'},
         // {name: 'twitter:site', content: this.tw_site},
         {name: 'twitter:creator', content: this.tw_creator}
       ]
