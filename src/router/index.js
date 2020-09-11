@@ -7,7 +7,8 @@ import Share from '@/components/Share'
 Vue.use(VueRouter)
 
 export default new VueRouter({
-  mode: 'history', // https://stackoverflow.com/a/34624803
+  // これをやると /s/:id とかが Firebase 上で動かなくなる。
+  // mode: 'history', // https://stackoverflow.com/a/34624803
   routes: [
     {
       path: '/c/',

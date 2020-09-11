@@ -150,7 +150,7 @@ export default {
           time: Date.now(),
           syntax: this.input_syntax
         })
-        location.href = `/s/${uuid}`
+        location.href = `#/s/${uuid}`
       })
     } // upload2firebase
   }, // methods
