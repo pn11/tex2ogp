@@ -51,7 +51,7 @@ const genHtml = (image_url, image_id) => `
   <body>
     <script>
       // クローラーにはメタタグを解釈させて、人間は任意のページに飛ばす
-      location.href = '/#/s/${image_id}';
+      location.href = 'https://tex2ogp.web.app/#/s/${image_id}';
     </script>
   </body>
 </html>
