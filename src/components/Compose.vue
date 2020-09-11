@@ -4,7 +4,7 @@
     <textarea v-model="input_text" placeholder="E=mc^2"
 rows="10" cols="50"></textarea><br>
     <input type="button" value="Create" @click="upload2firebase"><br>
-    <svg id="svg2" width="1200px" height="630px" viewBox="0 0  860 520"><rect width="100%" height="100%" fill="white"/></svg>
+    <svg id="svg-draft" width="1200px" height="630px" viewBox="0 0  860 520"><rect width="100%" height="100%" fill="white"/></svg>
   </div>
 </template>
 
@@ -62,8 +62,8 @@ const svg2png = (svgElement, successCallback, errorCallback) => {
   image.onerror = (e) => {
     errorCallback(e)
   }
-  document.getElementById('svg2').appendChild(svgElement.cloneNode(true))
-  const svgData = new XMLSerializer().serializeToString(document.getElementById('svg2'))
+  document.getElementById('svg-draft').appendChild(svgElement.cloneNode(true))
+  const svgData = new XMLSerializer().serializeToString(document.getElementById('svg-draft'))
   image.src = 'data:image/svg+xml;charset=utf-8;base64,' + btoa(unescape(encodeURIComponent(svgData)))
 }
 
@@ -153,7 +153,7 @@ export default {
         location.href = `#/s/${uuid}`
       })
     } // upload2firebase
-  }, // methods
+  } // methods
 } // export default
 </script>
 
@@ -170,4 +170,5 @@ export default {
   padding: 10px 10px;
   margin: 20px 20px;
 }
+#svg-draft {display: none}
 </style>
