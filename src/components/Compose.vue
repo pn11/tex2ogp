@@ -4,7 +4,7 @@
     <textarea v-model="input_text" placeholder="E=mc^2"
 rows="10" cols="50"></textarea><br>
     <input type="button" value="Create" @click="upload2firebase"><br>
-    <svg id="svg-draft" width="1200px" height="630px" viewBox="0 0  860 520"><rect width="100%" height="100%" fill="white"/></svg>
+    <svg id="svg-draft" width="1200px" height="630px" viewBox="0 0 1200 630"><rect width="100%" height="100%" fill="white"/></svg>
   </div>
 </template>
 
@@ -109,7 +109,7 @@ export default {
           // font: 'STIX-Web',
           font: 'Asana-Math',
           linebreaks: {
-            width: '30em'
+            width: '40em'
           },
           useFontCache: false,
           useGlobalCache: false
