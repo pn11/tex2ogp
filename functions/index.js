@@ -15,15 +15,15 @@ const site_name = 'TeX2OGP';
 const title = 'TeX2OGP';
 const meta_description = 'TeX2OGP';
 const meta_keywords = ['TeX'];
-const og_description = '@TeX2OGP'
+const og_description = 'TeX2OGP'
 var og_image_width = 1200;
-var og_image_height = 640;
+var og_image_height = 630;
 const fb_appid = '';
 const tw_description = 'TeX2OGP';
 const tw_site = '';
 const tw_creator = '@nowohyeah';
 
-const genHtml = image_url => `
+const genHtml = (image_url, image_id) => `
 <!DOCTYPE html>
 <html>
   <head>
@@ -51,13 +51,13 @@ const genHtml = image_url => `
   <body>
     <script>
       // クローラーにはメタタグを解釈させて、人間は任意のページに飛ばす
-      // location.href = '/#/s';
+      location.href = '/s/${image_id}';
     </script>
   </body>
 </html>
 `;
 
-app.get('/s/:id', (req, res) => {
+app.get('/ogp/:id', (req, res) => {
   db.collection('cards')
     .doc(req.params.id)
     .get()
@@ -66,17 +66,10 @@ app.get('/s/:id', (req, res) => {
         res.status(404).send('404 Not Exist');
       } else {
         const data = result.data();
-        const img = new Image()
-          img.onload = function () {
-          og_image_width = img.width
-          og_image_height = img.height
-        }
-        img.src = data.url
-
-        const html = genHtml(data.url);
+        const html = genHtml(data.url, req.params.id);
         res.set('cache-control', 'public, max-age=3600');
         res.send(html);
       }
     });
 });
-exports.s = functions.https.onRequest(app);
+exports.ogp = functions.https.onRequest(app);

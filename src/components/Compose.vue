@@ -3,7 +3,8 @@
     <vue-mathjax v-bind:formula="input_syntax" v-bind:options="options"></vue-mathjax><br>
     <textarea v-model="input_text" placeholder="E=mc^2"
 rows="10" cols="50"></textarea><br>
-    <input type="button" value="Share" @click="upload2firebase">
+    <input type="button" value="Create" @click="upload2firebase"><br>
+    <svg id="svg2" width="1200px" height="630px" viewBox="0 0  860 520"><rect width="100%" height="100%" fill="white"/></svg>
   </div>
 </template>
 
@@ -33,20 +34,22 @@ const svg2png = (svgElement, successCallback, errorCallback) => {
   // document.body.insertBefore(canvas, document.getElementById('app'))
   // const {width, height} = svgElement.getBBox()
   // https://stackoverflow.com/a/9850384
-  var rect = svgElement.getBoundingClientRect()
-  const width = rect.width
-  const height = rect.height
-  const ratio = height / width
-  canvas.height = height
-  canvas.width = width
+  // var rect = svgElement.getBoundingClientRect()
+  //  const width = rect.width
+  // const height = rect.height
+  // const ratio = height / width
+  // canvas.height = height
+  // canvas.width = width
   // 縦と横の大きい方を1200に設定
-  if (ratio > 1) {
-    canvas.height = 1200
-    canvas.width = canvas.height / ratio
-  } else {
-    canvas.width = 1200
-    canvas.height = canvas.width * ratio
-  }
+  // if (ratio > 1) {
+  //   canvas.height = 1200
+  //   canvas.width = canvas.height / ratio
+  // } else {
+  //   canvas.width = 1200
+  //  canvas.height = canvas.width * ratio
+  // }
+  canvas.width = 1200
+  canvas.height = 630
 
   // console.log(`${width} x ${height} -> ${canvas.width} x ${canvas.height}`)
   const ctx = canvas.getContext('2d')
@@ -59,7 +62,8 @@ const svg2png = (svgElement, successCallback, errorCallback) => {
   image.onerror = (e) => {
     errorCallback(e)
   }
-  const svgData = new XMLSerializer().serializeToString(svgElement)
+  document.getElementById('svg2').appendChild(svgElement.cloneNode(true))
+  const svgData = new XMLSerializer().serializeToString(document.getElementById('svg2'))
   image.src = 'data:image/svg+xml;charset=utf-8;base64,' + btoa(unescape(encodeURIComponent(svgData)))
 }
 
@@ -146,6 +150,7 @@ export default {
           time: Date.now(),
           syntax: this.input_syntax
         })
+        location.href = `/s/${uuid}`
       })
     } // upload2firebase
   }, // methods

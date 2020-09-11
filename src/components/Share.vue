@@ -2,7 +2,7 @@
   <div id="Share">
     <img v-bind:src="image_url" width="600">
     <p>{{ image_syntax }}</p>
-    <p>{{ og_image_width }} x {{ og_image_height }}</p>
+    <a class="twitter-share-button" v-bind:href="tweet_content" data-size="large">Tweet</a>
   </div>
 </template>
 
@@ -16,37 +16,9 @@ export default {
   },
   data: function () {
     return {
-      title: 'TeX2OGP',
-      site_name: 'TeX2OGP',
-      og_description: 'TeX2OGP',
-      og_image_width: '',
-      og_image_height: '',
-      fb_appid: '',
-      tw_description: 'TeX2OGP',
-      tw_site: '',
-      tw_creator: '@nowohyeah',
-      db_record: ''
+      db_record: {}
     }
   }, // data
-  watch: {
-    '$route' () {
-      this.$emit('updateHead')
-    },
-    image_url: function (val) {
-      const img = new Image()
-      // capture Vue object https://stackoverflow.com/a/42590926
-      var this_ = this
-      img.onload = function () {
-        this_.og_image_width = img.width
-        this_.og_image_height = img.height
-      }
-      img.src = val
-    }, // image_url
-    og_image_width: function () {
-      this.$emit('updateHead')
-      console.log('emit')
-    }
-  }, // watch
   methods: {
     getFromFirebase () {
       const db = firebase.firestore()
@@ -69,36 +41,13 @@ export default {
     this.getFromFirebase()
   },
   computed: {
-    url: function () { return location.href },
     image_url: function () { return this.db_record.url },
     image_date: function () { return this.db_record.date },
-    image_syntax: function () { return this.db_record.syntax }
-  },
-  metaInfo () {
-    return {
-      title: 'TeX2OGP',
-      meta: [
-        {name: 'description', content: 'TeX2OGP'},
-        {property: 'og:locale', content: 'ja_JP'},
-        {property: 'og:type', content: 'website'},
-        {property: 'og:url', content: this.url},
-        {property: 'og:title', content: this.title},
-        {property: 'og:site_name', content: this.site_name},
-        {property: 'og:description', content: this.og_description},
-        {property: 'og:image', content: this.image_url},
-        {property: 'og:image:width', content: this.og_image_width},
-        {property: 'og:image:height', content: this.og_image_height},
-        // {property: 'fb:app_id', content: this.fb_appid},
-        {name: 'twitter:card', content: 'summary_large_image'},
-        // {name: 'twitter:title', content: this.title},
-        {name: 'twitter:description', content: this.tw_description},
-        // {name: 'twitter:image', content: this.image_url},
-        {name: 'twitter:image', content: 'https://firebasestorage.googleapis.com/v0/b/tex2ogp.appspot.com/o/01efb740-575c-461e-a53d-510dddac5afe.jpg?alt=media&token=5d37a72e-b325-4742-bec4-7281b22dc256'},
-        // {name: 'twitter:site', content: this.tw_site},
-        {name: 'twitter:creator', content: this.tw_creator}
-      ]
+    image_syntax: function () { return this.db_record.syntax },
+    tweet_content: function () {
+      return `https://twitter.com/intent/tweet?url=https://tex2ogp.web.app/ogp/${this.$route.params.id}&hashtags=tex2ogp`
     }
-  } // metaInfo
+  }
 } // export default
 </script>
 
@@ -111,8 +60,7 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
-#Compose textarea {
-  padding: 10px 10px;
-  margin: 20px 20px;
+#Share img {
+  border: solid 1px;
 }
 </style>

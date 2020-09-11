@@ -8,9 +8,9 @@
     ],
     "rewrites": [
       {
-        // /s/:idで Firebase Function に飛ばす
-        "source": "/s/**",
-        "function": "s"
+        // /ogp/:idで Firebase Function に飛ばす
+        "source": "/ogp/**",
+        "function": "ogp"
       }
     ]
   }

@@ -7,6 +7,7 @@ import Share from '@/components/Share'
 Vue.use(VueRouter)
 
 export default new VueRouter({
+  mode: 'history', // https://stackoverflow.com/a/34624803
   routes: [
     {
       path: '/c/',
