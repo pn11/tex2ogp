@@ -1,6 +1,22 @@
 # TeX2OGP
 
-> A Vue.js project
+<https://tex2ogp.web.app/>
+
+## ディレクトリ構成
+
+- `src`: Vue.js のソース
+  - `App.vue`: Vue-Router を呼び出すだけ
+  - `main.js`: Vue のライブラリなどをインポートして Vue のインスタンスを作る
+  - `assets`: 画像などを入れる
+  - `components`: Vue コンポーネントを入れる
+  - `router`: Vue-Router
+- `functions`: Firebase Cloud Functions 用のディレクトリ
+
+## 参考リンク
+
+- [Vue.jsとFirebaseでOGP画像生成系のサービスを爆速で作ろう - Qiita](https://qiita.com/serinuntius/items/3017fb6ef51cd47352f6)
+- [「Vue.jsとFirebaseでOGP画像生成系のサービスを爆速で作ろう」を実際に作ってみる - Qiita](https://qiita.com/kanye__east/items/6cbcdc8fe5103084c737)
+
 
 ## Build Setup
 
