@@ -19,7 +19,6 @@
     "mathjax-node": "^2.1.1",
     "vue": "^2.5.2",
     "vue-mathjax": "0.0.11",
-    "vue-meta": "^2.4.0",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {
