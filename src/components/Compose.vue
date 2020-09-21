@@ -4,7 +4,8 @@
     <textarea v-model="input_text" placeholder="E=mc^2"
 rows="10" cols="50"></textarea><br>
     <input type="button" value="Create" @click="upload2firebase"><br>
-    <svg id="svg-draft" width="1200px" height="630px" viewBox="0 0 1200 630"><rect width="100%" height="100%" fill="white"/></svg>
+    <!-- <input type="button" value="Preview (debug)" @click="createSVG"><br> -->
+    <svg id="svg-draft" width="1200px" height="630px" viewBox="0 0 1200 630"><rect width="100%" height="100%" fill="white" stroke="black"/></svg>
   </div>
 </template>
 
@@ -62,7 +63,16 @@ const svg2png = (svgElement, successCallback, errorCallback) => {
   image.onerror = (e) => {
     errorCallback(e)
   }
-  document.getElementById('svg-draft').appendChild(svgElement.cloneNode(true))
+  var svgDraft = document.getElementById('svg-draft')
+  // var clone = svgDraft.cloneNode()
+  // svgDraft.parentNode.replaceChild(clone, svgDraft)
+  // svgDraft.appendChild(svgElement.cloneNode(true))
+  var fChild = svgDraft.firstChild
+  if (fChild != null) {
+    fChild.parentNode.replaceChild(svgElement.cloneNode(true), fChild)
+  } else {
+    svgDraft.appendChild(svgElement.cloneNode(true))
+  }
   const svgData = new XMLSerializer().serializeToString(document.getElementById('svg-draft'))
   image.src = 'data:image/svg+xml;charset=utf-8;base64,' + btoa(unescape(encodeURIComponent(svgData)))
 }
@@ -119,7 +129,8 @@ export default {
   },
   computed: {
     input_syntax: function () {
-      return '$$' + this.input_text + '$$'
+      // 強制的に equation mode かつ改行ありにする
+      return '$$' + this.input_text + ' \\\\ ' + '$$'
     }
   },
   methods: {
@@ -152,7 +163,10 @@ export default {
         })
         location.href = `#/s/${uuid}`
       })
-    } // upload2firebase
+    }, // upload2firebase
+    async createSVG () {
+      svg2png(document.querySelector('#Compose > span > div > span > svg'), () => {})
+    }
   } // methods
 } // export default
 </script>
@@ -170,5 +184,9 @@ export default {
   padding: 10px 10px;
   margin: 20px 20px;
 }
-#svg-draft {display: none}
+/* Debug 時以下の display none をコメントアウトする */
+#svg-draft {
+  display: none;
+  border: solid 1px;
+}
 </style>
