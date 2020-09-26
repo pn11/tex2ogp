@@ -1,16 +1,13 @@
 <template>
   <div id="Compose">
-    <vue-mathjax v-bind:formula="input_syntax" v-bind:options="options"></vue-mathjax><br>
-    <textarea v-model="input_text" placeholder="E=mc^2"
-rows="10" cols="50"></textarea><br>
+    <textarea v-model="input_text" placeholder="E=mc^2" rows="10" cols="50"></textarea><br>
+    <svg id="svg-draft" width="600px" height="315px" viewBox="0 0 480 252"><rect width="100%" height="100%" fill="white" stroke="black"/></svg><br>
     <input type="button" value="Create" @click="upload2firebase"><br>
-    <!-- <input type="button" value="Preview (debug)" @click="createSVG"><br> -->
-    <svg id="svg-draft" width="1200px" height="630px" viewBox="0 0 1200 630"><rect width="100%" height="100%" fill="white" stroke="black"/></svg>
+    <span id="mathjax-el" ref="mathJaxEl">{{input_syntax}}</span><br>
   </div>
 </template>
 
 <script>
-import { VueMathjax } from 'vue-mathjax'
 import firebase from 'firebase'
 
 // Your web app's Firebase configuration
@@ -36,19 +33,8 @@ const svg2png = (svgElement, successCallback, errorCallback) => {
   // const {width, height} = svgElement.getBBox()
   // https://stackoverflow.com/a/9850384
   // var rect = svgElement.getBoundingClientRect()
-  //  const width = rect.width
+  // const width = rect.width
   // const height = rect.height
-  // const ratio = height / width
-  // canvas.height = height
-  // canvas.width = width
-  // 縦と横の大きい方を1200に設定
-  // if (ratio > 1) {
-  //   canvas.height = 1200
-  //   canvas.width = canvas.height / ratio
-  // } else {
-  //   canvas.width = 1200
-  //  canvas.height = canvas.width * ratio
-  // }
   canvas.width = 1200
   canvas.height = 630
 
@@ -57,16 +43,19 @@ const svg2png = (svgElement, successCallback, errorCallback) => {
   const image = new Image()
   image.onload = () => {
     ctx.drawImage(image, 0, 0, canvas.width, canvas.height)
-    successCallback(canvas.toDataURL())
+    successCallback(canvas.toDataURL()) // 引数なしだと PNG
     // successCallback(canvas.toDataURL('image/jpg'))
   }
   image.onerror = (e) => {
     errorCallback(e)
   }
+  // MathJax で render した結果を svg-draft にコピー
+  // svg-draft は view box で見える範囲を設定して zoom している。
+  // align center などにする場合は見える範囲を変える必要がある。
   var svgDraft = document.getElementById('svg-draft')
-  // var clone = svgDraft.cloneNode()
-  // svgDraft.parentNode.replaceChild(clone, svgDraft)
-  // svgDraft.appendChild(svgElement.cloneNode(true))
+  if (svgElement == null) {
+    return null
+  }
   var fChild = svgDraft.firstChild
   if (fChild != null) {
     fChild.parentNode.replaceChild(svgElement.cloneNode(true), fChild)
@@ -79,8 +68,11 @@ const svg2png = (svgElement, successCallback, errorCallback) => {
 
 export default {
   name: 'Compose',
-  components: {
-    'vue-mathjax': VueMathjax
+  props: {
+    safe: {
+      type: Boolean,
+      default: true
+    }
   },
   data: function () {
     return {
@@ -96,8 +88,7 @@ export default {
           displayMath: [ ['$$', '$$'], ['\\[', '\\]'] ],
           processEscapes: true
         },
-        'HTML-CSS': {},
-         */
+        */
         SVG: {
           /*
           scale: 1,
@@ -133,6 +124,11 @@ export default {
       return '$$' + this.input_text + ' \\\\ ' + '$$'
     }
   },
+  watch: {
+    input_syntax: function () {
+      this.renderMathJax()
+    }
+  },
   methods: {
     uuidv4 () {
       // https://stackoverflow.com/a/2117523
@@ -166,6 +162,59 @@ export default {
     }, // upload2firebase
     async createSVG () {
       svg2png(document.querySelector('#Compose > span > div > span > svg'), () => {})
+    },
+    renderContent () {
+      if (this.safe) {
+        this.$refs.mathJaxEl.textContent = this.input_syntax
+      } else {
+        this.$refs.mathJaxEl.innerHTML = this.input_syntax
+      }
+    },
+    // This part is extracted from vue-mathjax
+    // https://github.com/justforuse/vue-mathjax
+    renderMathJax () {
+      this.renderContent()
+      if (window.MathJax) {
+        window.MathJax.Hub.Config({
+          tex2jax: {
+            inlineMath: [['$', '$'], ['(', ')']],
+            displayMath: [['$$', '$$'], ['[', ']']],
+            processEscapes: true,
+            processEnvironments: true
+          },
+          // Center justify equations in code and markdown cells. Elsewhere
+          // we use CSS to left justify single line equations in code cells.
+          displayAlign: 'left',
+          'HTML-CSS': {
+            // scale: 1300,
+            // styles: {
+            //  '.MathJax_Display': { margin: 1000, 'text-align': 'left', 'font-size': '1000em !important' },
+            //  '.MathJax': {'font-size': '1000em !important'}
+            // },
+            linebreaks: { automatic: true }
+          },
+          // CommonHTML: {
+          //   scale: 1300
+          // },
+          // styles: {
+          //   '.MathJax_Display': { margin: 1000, 'text-align': 'left', 'font-size': '1000em !important' },
+          //   '.MathJax': {'font-size': '1000em !important'}
+          /// },
+          ...this.options
+        })
+        window.MathJax.Hub.Queue([
+          'Typeset',
+          window.MathJax.Hub,
+          this.$refs.mathJaxEl
+        ])
+        // Queue や Hook などで SVG のレンダリング終了を取ってこれなかったため、
+        // 1000 ms 待ってから SVG -> PNG の変換を行う
+        // cf. https://docs.mathjax.org/en/v2.7-latest/api/callback.html#Delay
+        // これはうまくいかなかった -> https://github.com/mathjax/mathjax-docs/wiki/Event-when-typesetting-is-done%3F-Rescaling-after-rendering...
+        window.MathJax.Callback.Delay(1000, () => {
+          svg2png(document.querySelector('#Compose > span > div > span > svg'), () => {})
+        })
+      }
     }
   } // methods
 } // export default
@@ -184,9 +233,10 @@ export default {
   padding: 10px 10px;
   margin: 20px 20px;
 }
-/* Debug 時以下の display none をコメントアウトする */
 #svg-draft {
-  display: none;
   border: solid 1px;
+}
+#mathjax-el {
+  display: none;
 }
 </style>
