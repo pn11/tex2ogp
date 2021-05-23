@@ -120,8 +120,8 @@ export default {
   },
   computed: {
     input_syntax: function () {
-      // 強制的に equation mode かつ改行ありにする
-      return '$$' + this.input_text + ' \\\\ ' + '$$'
+      // 強制的に equation mode かつ改行ありにする。\bra と \ket も定義
+      return '$$ \\def\\bra#1{\\mathinner{\\langle{#1}|}}\\def\\ket#1{\\mathinner{|{#1}\\rangle}}\\def\\braket#1{\\mathinner{\\langle{#1}\\rangle}}\\def\\Bra#1{\\left\\langle#1\\right|}\\def\\Ket#1{\\left|#1\\right\\rangle}' + this.input_text + ' \\\\ ' + '$$'
     }
   },
   watch: {
@@ -155,7 +155,7 @@ export default {
         await card.set({
           url: url,
           time: Date.now(),
-          syntax: this.input_syntax
+          syntax: this.input_text
         })
         location.href = `#/s/${uuid}`
       })
